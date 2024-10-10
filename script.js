@@ -4,7 +4,7 @@
 // @match        *://2ch.hk/*
 // @author       Anon
 // @grant        none
-// @version      0.6
+// @version      0.7
 // @updateURL  https://ortophius.github.io/2ch-image-by-text-generator/script.js
 // @downloadURL  https://ortophius.github.io/2ch-image-by-text-generator/script.js
 // ==/UserScript==
@@ -16,6 +16,7 @@
     canvasWidth: 450,
     canvasHeight: "auto",
     removeAfterSubmit: false,
+    fontSize: 18,
   };
 
   const loadSettings = () => {
@@ -100,12 +101,19 @@
     color: var(--theme_default_btntext);
   }
 
+  #ab__font-size {
+    width: 45px;
+  }
+
   .ab__footer {
     padding: 0 8px;
   }
 
   .ab__settings {
     padding: 8px 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-auto-rows: 1fr;
   }
 `;
 
@@ -132,6 +140,11 @@
     </div>
     <div class="ab__footer">
       <div class="ab__settings">
+      <label>
+      Размер шрифта
+      <input id="ab__font-size" type="number" value="${
+        settings.fontSize
+      }" /></label>
         <label>
           <input type="checkbox" id="ab__remove-after-submit" ${
             settings.removeAfterSubmit ? "checked" : ""
@@ -236,8 +249,7 @@
       });
 
       outputLines.forEach((line, i) => {
-        const fontHeight = 16;
-        const offsetY = (i + 1) * fontHeight;
+        const offsetY = (i + 1) * settings.fontSize;
         ctx.fillText(line, 20, offsetY);
       });
     };
@@ -247,7 +259,7 @@
     ctx.fillStyle = "white";
     ctx.fillRect(0, 0, canvasWidth, canvasHeight);
 
-    ctx.font = "16px sans-serif";
+    ctx.font = `${settings.fontSize}px sans-serif`;
     ctx.fillStyle = "black";
     renderText();
   };
@@ -274,6 +286,12 @@
   const handleRemoveAfterSubmitToggle = (e) => {
     const isChecked = e.currentTarget.checked;
     saveOpt("removeAfterSubmit", isChecked);
+    renderCanvas();
+  };
+
+  const handleFontSizeChange = (e) => {
+    const { value } = e.currentTarget;
+    saveOpt("fontSize", Number(value) || 18);
   };
 
   const handleSubmit = () => {
@@ -312,6 +330,9 @@
 
     const submitButton = getElement(replyWindow, "#ab__submit");
     submitButton.addEventListener("click", handleSubmit);
+
+    const fontSizeInput = getElement(replyWindow, "#ab__font-size");
+    fontSizeInput.addEventListener("change", handleFontSizeChange);
 
     setupCanvas();
   };
