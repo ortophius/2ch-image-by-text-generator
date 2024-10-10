@@ -4,7 +4,7 @@
 // @match        *://2ch.hk/*
 // @author       Anon
 // @grant        none
-// @version      0.4
+// @version      0.5
 // @updateURL  https://ortophius.github.io/2ch-image-by-text-generator/script.js
 // @downloadURL  https://ortophius.github.io/2ch-image-by-text-generator/script.js
 // ==/UserScript==
@@ -88,6 +88,18 @@
     background-color: #657a8dd1;
   }
 
+  #ab__submit {
+    padding: 4px 6px;
+    border: none;
+    background-color: #eaeaea;
+    background-color: var(--theme_default_btnbg);
+    cursor: pointer;
+    border: 1px solid #e0e0e0;
+    border: 1px solid var(--theme_default_btnborder);
+    transition: background-color .2s ease;
+    color: var(--theme_default_btntext);
+  }
+
   .ab__footer {
     padding: 0 8px;
   }
@@ -127,7 +139,7 @@
           Удалить текст после добавления
         </label>
       </div>
-      <button id="ab__submit" class="button">Добавить</button>
+      <button id="ab__submit">Добавить</button>
     </div>
   </div>`;
 
