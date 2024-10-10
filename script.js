@@ -6,6 +6,7 @@
 // @author       Anon
 // @grant        none
 // @version      0.1.1
+// @updateURL  https://raw.githubusercontent.com/ortophius/2ch-image-by-text-generator/refs/heads/main/script.js
 // @downloadURL  https://raw.githubusercontent.com/ortophius/2ch-image-by-text-generator/refs/heads/main/script.js
 // ==/UserScript==
 
