@@ -2,7 +2,6 @@
 // @name         2ch antibot image generator
 // @namespace    http://2ch.hk/b
 // @match        *://2ch.hk/*
-// @version      2024-10-09
 // @author       Anon
 // @grant        none
 // @version      0.2
