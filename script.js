@@ -5,7 +5,7 @@
 // @version      2024-10-09
 // @author       Anon
 // @grant        none
-// @version      0.1.0
+// @version      0.1.1
 // @downloadURL  https://raw.githubusercontent.com/ortophius/2ch-image-by-text-generator/refs/heads/main/script.js
 // ==/UserScript==
 
