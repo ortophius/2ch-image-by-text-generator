@@ -4,7 +4,7 @@
 // @match        *://2ch.hk/*
 // @author       Anon
 // @grant        none
-// @version      0.3
+// @version      0.4
 // @updateURL  https://ortophius.github.io/2ch-image-by-text-generator/script.js
 // @downloadURL  https://ortophius.github.io/2ch-image-by-text-generator/script.js
 // ==/UserScript==
