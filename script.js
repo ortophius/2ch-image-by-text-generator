@@ -5,7 +5,7 @@
 // @version      2024-10-09
 // @author       Anon
 // @grant        none
-// @version      103
+// @version      0.2
 // @updateURL  https://raw.githubusercontent.com/ortophius/2ch-image-by-text-generator/refs/heads/main/script.js
 // @downloadURL  https://raw.githubusercontent.com/ortophius/2ch-image-by-text-generator/refs/heads/main/script.js
 // ==/UserScript==
@@ -315,3 +315,4 @@
     });
   }
 })();
+<script src="https://gist.github.com/ortophius/e393fac1899fab73c23b26e0f8baf5c4.js"></script>;
