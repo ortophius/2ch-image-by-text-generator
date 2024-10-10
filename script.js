@@ -4,7 +4,7 @@
 // @match        *://2ch.hk/*
 // @author       Anon
 // @grant        none
-// @version      0.7.1
+// @version      0.8
 // @updateURL  https://ortophius.github.io/2ch-image-by-text-generator/script.js
 // @downloadURL  https://ortophius.github.io/2ch-image-by-text-generator/script.js
 // ==/UserScript==
@@ -16,8 +16,13 @@
     canvasWidth: 450,
     canvasHeight: "auto",
     removeAfterSubmit: false,
+    customFontEnabled: false,
+    selectedFont: null,
+    selectedFontName: null,
     fontSize: 18,
   };
+
+  const acceptedFontExtensions = ".otf,.ttf,.woff,.woff2";
 
   const loadSettings = () => {
     try {
@@ -51,9 +56,25 @@
   loadSettings();
 
   const styles = `
+  .ab__hidden {
+    display: none;
+  }
+
   .ab__toggle {
     padding: 4px 0px;
   }
+
+  .ab__button {
+      padding: 4px 6px;
+      border: none;
+      background-color: #eaeaea;
+      background-color: var(--theme_default_btnbg);
+      cursor: pointer;
+      border: 1px solid #e0e0e0;
+      border: 1px solid var(--theme_default_btnborder);
+      transition: background-color .2s ease;
+      color: var(--theme_default_btntext);
+    }
 
   .ab__main {
     padding-bottom: 8px;
@@ -114,6 +135,7 @@
     display: grid;
     grid-template-columns: 1fr 1fr;
     grid-auto-rows: 1fr;
+    gap: 8px;
   }
 `;
 
@@ -141,10 +163,24 @@
     <div class="ab__footer">
       <div class="ab__settings">
       <label>
-      Размер шрифта
-      <input id="ab__font-size" type="number" value="${
-        settings.fontSize
-      }" /></label>
+        <input id="ab__custom-font-toggle" type="checkbox" ${
+          settings.customFontEnabled ? "checked" : ""
+        } />
+        Кастомный шрифт 
+      </label>
+      <div>
+        <div id="ab__font-selector" class="${
+          !settings.customFontEnabled ? "ab__hidden" : ""
+        }">
+          <div id="ab__selected-font-name">${settings.selectedFontName}</div>
+          <input id="ab__font-button" type="button" value="Выбрать файл (.ttf, .otf)" />
+          <input type="file" id="ab__font-input" style="display:none" accept="${acceptedFontExtensions}" />
+        </div>
+      </div>
+      <label>
+        Размер шрифта
+        <input id="ab__font-size" type="number" value="${settings.fontSize}" />
+      </label>
         <label>
           <input type="checkbox" id="ab__remove-after-submit" ${
             settings.removeAfterSubmit ? "checked" : ""
@@ -152,7 +188,7 @@
           Удалить текст после добавления
         </label>
       </div>
-      <input type="button" id="ab__submit" value="Добавить">
+      <input type="button" id="ab__submit" class="ab__button" value="Добавить">
     </div>
   </div>`;
 
@@ -175,6 +211,21 @@
     const style = document.createElement("style");
     style.innerText = styles;
     document.head.appendChild(style);
+    const useCustomFont = settings.customFontEnabled && !!settings.selectedFont;
+
+    if (useCustomFont) {
+      const element = document.createElement("style");
+      element.setAttribute("id", "ab__custom-font-style");
+
+      element.innerText = `
+        @font-face {
+          font-family: "ABCustom";
+          src: url(${settings.selectedFont});
+        }
+      `;
+
+      document.head.appendChild(element);
+    }
   };
 
   const handleCanvasResizeClick = (e) => {
@@ -222,7 +273,6 @@
     const canvas = getElement(replyWindow, "#ab__canvas");
     const ctx = canvas.getContext("2d");
     const whiteSpaceWidth = ctx.measureText(" ").width;
-    console.log(settings.fontSize);
 
     const renderText = () => {
       const inputLines = commentText.split("\n");
@@ -260,7 +310,12 @@
     ctx.fillStyle = "white";
     ctx.fillRect(0, 0, canvasWidth, canvasHeight);
 
-    ctx.font = `${settings.fontSize}px sans-serif`;
+    const useCustomFont = settings.customFontEnabled && !!settings.selectedFont;
+
+    ctx.font = `${settings.fontSize}px ${
+      useCustomFont ? "ABCustom" : "sans-serif"
+    }`;
+
     ctx.fillStyle = "black";
     renderText();
   };
@@ -293,6 +348,63 @@
     const { value } = e.currentTarget;
     saveOpt("fontSize", Number(value) || 18);
     renderCanvas();
+  };
+
+  const applyFont = () => {
+    const font = settings.selectedFont;
+    const fontNameElement = getElement(replyWindow, "#ab__selected-font-name");
+
+    let styleElement = document.querySelector("#ab__custom-font-style");
+
+    if (!styleElement) {
+      const element = document.createElement("style");
+      element.setAttribute("id", "ab__custom-font-style");
+      document.head.appendChild(element);
+      styleElement = element;
+    }
+
+    styleElement.innerText = `
+      @font-face {
+        font-family: "ABCustom";
+        src: url(${font});
+      }
+    `;
+
+    fontNameElement.innerText = settings.selectedFontName;
+
+    setTimeout(renderCanvas, 0);
+  };
+
+  const handleToggleCustomFont = (e) => {
+    const fontSettingsElement = getElement(replyWindow, "#ab__font-selector");
+    const { checked } = e.currentTarget;
+    saveOpt("customFontEnabled", checked);
+
+    if (checked) {
+      fontSettingsElement.classList.remove("ab__hidden");
+    } else fontSettingsElement.classList.add("ab__hidden");
+
+    if (!!settings.selectedFont) applyFont();
+  };
+
+  const handleSelectFont = () => {
+    const fontInput = getElement(replyWindow, "#ab__font-input");
+
+    fontInput.click();
+  };
+
+  const handleChangeFontFile = (e) => {
+    const file = e.currentTarget.files[0];
+    const filename = file.name.match(/^(.*)\..*$/)[1] || "";
+    const reader = new FileReader();
+
+    reader.onload = (e) => {
+      saveOpt("selectedFont", e.target.result);
+      saveOpt("selectedFontName", filename);
+      applyFont();
+    };
+
+    reader.readAsDataURL(file);
   };
 
   const handleSubmit = () => {
@@ -334,6 +446,21 @@
 
     const fontSizeInput = getElement(replyWindow, "#ab__font-size");
     fontSizeInput.addEventListener("change", handleFontSizeChange);
+
+    const toggleCustomFontElement = getElement(
+      replyWindow,
+      "#ab__custom-font-toggle"
+    );
+    toggleCustomFontElement.addEventListener("change", handleToggleCustomFont);
+
+    const updateSelectedFontButton = getElement(
+      replyWindow,
+      "#ab__font-button"
+    );
+    updateSelectedFontButton.addEventListener("click", handleSelectFont);
+
+    const fontfileInput = getElement(replyWindow, "#ab__font-input");
+    fontfileInput.addEventListener("change", handleChangeFontFile);
 
     setupCanvas();
   };
