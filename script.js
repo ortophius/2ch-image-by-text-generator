@@ -5,6 +5,8 @@
 // @version      2024-10-09
 // @author       Anon
 // @grant        none
+// @version      0.1.0
+// @downloadURL  https://raw.githubusercontent.com/ortophius/2ch-image-by-text-generator/refs/heads/main/script.js
 // ==/UserScript==
 
 (function () {
@@ -20,9 +22,7 @@
     try {
       const savedSettings = JSON.parse(localStorage.getItem("__ab"));
       Object.assign(settings, savedSettings);
-      console.log(savedSettings, settings);
     } catch (e) {
-      console.log(e);
       localStorage.setItem("__ab", JSON.stringify(settings));
     }
   };
@@ -166,7 +166,6 @@
     const moveHandler = (e) => {
       const delta = e.screenX - offsetX;
 
-      console.log(currentWidth, delta);
       canvasElement.setAttribute(
         "style",
         `width: ${currentWidth + delta}px; height: auto; min-width: 100px`
