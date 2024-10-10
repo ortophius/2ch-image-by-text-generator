@@ -4,7 +4,7 @@
 // @match        *://2ch.hk/*
 // @author       Anon
 // @grant        none
-// @version      0.5
+// @version      0.6
 // @updateURL  https://ortophius.github.io/2ch-image-by-text-generator/script.js
 // @downloadURL  https://ortophius.github.io/2ch-image-by-text-generator/script.js
 // ==/UserScript==
@@ -139,7 +139,7 @@
           Удалить текст после добавления
         </label>
       </div>
-      <button id="ab__submit">Добавить</button>
+      <input type="button" id="ab__submit" value="Добавить">
     </div>
   </div>`;
 
@@ -273,7 +273,7 @@
 
   const handleRemoveAfterSubmitToggle = (e) => {
     const isChecked = e.currentTarget.checked;
-    saveOpt(removeAfterSubmit, isChecked);
+    saveOpt("removeAfterSubmit", isChecked);
   };
 
   const handleSubmit = () => {
