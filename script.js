@@ -4,7 +4,7 @@
 // @match        *://2ch.hk/*
 // @author       Anon
 // @grant        none
-// @version      0.9
+// @version      0.9.1
 // @updateURL  https://ortophius.github.io/2ch-image-by-text-generator/script.js
 // @downloadURL  https://ortophius.github.io/2ch-image-by-text-generator/script.js
 // ==/UserScript==
@@ -20,6 +20,9 @@
     selectedFont: null,
     selectedFontName: null,
     fontSize: 18,
+    textColor: "black",
+    bgcolor: "white",
+    bgimage: null,
   };
 
   const acceptedFontExtensions = ".otf,.ttf,.woff,.woff2";
@@ -162,6 +165,10 @@
     </div>
     <div class="ab__footer">
       <div class="ab__settings">
+      <div>Оформление</div>
+      <div>
+
+      </div>
       <label style="font-family: 'ABCustom';">
         <input id="ab__custom-font-toggle" type="checkbox" ${
           settings.customFontEnabled ? "checked" : ""
@@ -211,7 +218,7 @@
     const style = document.createElement("style");
     style.innerText = styles;
     document.head.appendChild(style);
-    const useCustomFont = settings.customFontEnabled && !!settings.selectedFont;
+    const useCustomFont = !!settings.selectedFont;
 
     if (useCustomFont) {
       const element = document.createElement("style");
