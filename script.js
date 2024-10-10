@@ -4,7 +4,7 @@
 // @match        *://2ch.hk/*
 // @author       Anon
 // @grant        none
-// @version      0.7
+// @version      0.7.1
 // @updateURL  https://ortophius.github.io/2ch-image-by-text-generator/script.js
 // @downloadURL  https://ortophius.github.io/2ch-image-by-text-generator/script.js
 // ==/UserScript==
@@ -222,6 +222,7 @@
     const canvas = getElement(replyWindow, "#ab__canvas");
     const ctx = canvas.getContext("2d");
     const whiteSpaceWidth = ctx.measureText(" ").width;
+    console.log(settings.fontSize);
 
     const renderText = () => {
       const inputLines = commentText.split("\n");
@@ -286,12 +287,12 @@
   const handleRemoveAfterSubmitToggle = (e) => {
     const isChecked = e.currentTarget.checked;
     saveOpt("removeAfterSubmit", isChecked);
-    renderCanvas();
   };
 
   const handleFontSizeChange = (e) => {
     const { value } = e.currentTarget;
     saveOpt("fontSize", Number(value) || 18);
+    renderCanvas();
   };
 
   const handleSubmit = () => {
