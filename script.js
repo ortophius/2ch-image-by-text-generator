@@ -4,7 +4,7 @@
 // @match        *://2ch.hk/*
 // @author       Anon
 // @grant        none
-// @version      0.8
+// @version      0.9
 // @updateURL  https://ortophius.github.io/2ch-image-by-text-generator/script.js
 // @downloadURL  https://ortophius.github.io/2ch-image-by-text-generator/script.js
 // ==/UserScript==
@@ -133,7 +133,7 @@
   .ab__settings {
     padding: 8px 0;
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr auto;
     grid-auto-rows: 1fr;
     gap: 8px;
   }
@@ -162,7 +162,7 @@
     </div>
     <div class="ab__footer">
       <div class="ab__settings">
-      <label>
+      <label style="font-family: 'ABCustom';">
         <input id="ab__custom-font-toggle" type="checkbox" ${
           settings.customFontEnabled ? "checked" : ""
         } />
@@ -173,7 +173,7 @@
           !settings.customFontEnabled ? "ab__hidden" : ""
         }">
           <div id="ab__selected-font-name">${settings.selectedFontName}</div>
-          <input id="ab__font-button" type="button" value="Выбрать файл (.ttf, .otf)" />
+          <input class="ab__button" id="ab__font-button" type="button" value="Выбрать файл (.ttf, .otf, .woff, woff2)" />
           <input type="file" id="ab__font-input" style="display:none" accept="${acceptedFontExtensions}" />
         </div>
       </div>
@@ -266,6 +266,8 @@
     canvas.setAttribute("style", `width: 450px;height: auto`);
 
     resizeElement.addEventListener("mousedown", handleCanvasResizeClick);
+
+    setInterval(renderCanvas, 300);
   };
 
   const renderCanvas = () => {
@@ -324,7 +326,6 @@
     const commentBox = getElement(replyWindow, "textarea#qr-shampoo");
     const text = commentBox.value;
     commentText = text;
-    renderCanvas();
   };
 
   const handleToggle = (e) => {
@@ -352,6 +353,7 @@
 
   const applyFont = () => {
     const font = settings.selectedFont;
+    const fontName = settings.selectedFontName;
     const fontNameElement = getElement(replyWindow, "#ab__selected-font-name");
 
     let styleElement = document.querySelector("#ab__custom-font-style");
@@ -370,9 +372,9 @@
       }
     `;
 
-    fontNameElement.innerText = settings.selectedFontName;
+    fontNameElement.innerText = fontName;
 
-    setTimeout(renderCanvas, 0);
+    setTimeout(renderCanvas, 2000);
   };
 
   const handleToggleCustomFont = (e) => {
