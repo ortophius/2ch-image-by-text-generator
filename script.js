@@ -4,9 +4,9 @@
 // @match        *://2ch.hk/*
 // @author       Anon
 // @grant        none
-// @version      0.2
-// @updateURL  https://raw.githubusercontent.com/ortophius/2ch-image-by-text-generator/refs/heads/main/script.js
-// @downloadURL  https://raw.githubusercontent.com/ortophius/2ch-image-by-text-generator/refs/heads/main/script.js
+// @version      0.3
+// @updateURL  https://ortophius.github.io/2ch-image-by-text-generator/script.js
+// @downloadURL  https://ortophius.github.io/2ch-image-by-text-generator/script.js
 // ==/UserScript==
 
 (function () {
