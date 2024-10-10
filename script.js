@@ -314,4 +314,3 @@
     });
   }
 })();
-<script src="https://gist.github.com/ortophius/e393fac1899fab73c23b26e0f8baf5c4.js"></script>;
